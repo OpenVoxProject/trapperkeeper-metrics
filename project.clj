@@ -30,7 +30,7 @@
                  [org.openvoxproject/comidi]
                  [org.openvoxproject/i18n]]
 
-  :plugins [[org.openvoxproject/i18n "0.9.2"]
+  :plugins [[org.openvoxproject/i18n "0.9.3-SNAPSHOT"]
             [lein-parent "0.3.9"]]
 
   :source-paths  ["src/clj"]
