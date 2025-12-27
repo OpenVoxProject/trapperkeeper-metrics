@@ -5,9 +5,9 @@
             [ring.util.jakarta.servlet :as ring-servlet]
             [schema.core :as schema])
   (:import [jakarta.servlet.http HttpServletRequest]
-           [org.jolokia.config ConfigKey]
-           [org.jolokia.util LogHandler]
-           [org.jolokia.http AgentServlet]))
+           [org.jolokia.server.core.config ConfigKey]
+           [org.jolokia.server.core.service.api LogHandler]
+           [org.jolokia.server.core.http AgentServlet]))
 
 
 (def config-mapping
@@ -71,7 +71,8 @@
     LogHandler
     (debug [this message] (log/debug message))
     (info [this message] (log/info message))
-    (error [this message throwable] (log/error throwable message))))
+    (error [this message throwable] (log/error throwable message))
+    (isDebug [this] (log/enabled? :debug))))
 
 (defn create-servlet
   "Builds a Jolokia Servlet that uses Clojure logging."
