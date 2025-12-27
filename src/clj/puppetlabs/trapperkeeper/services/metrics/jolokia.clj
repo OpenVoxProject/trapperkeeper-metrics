@@ -2,9 +2,9 @@
   "Clojure helpers for constructing and configuring Jolokia servlets."
   (:require [clojure.tools.logging :as log]
             [clojure.walk :as walk]
-            [ring.util.servlet :as ring-servlet]
+            [ring.util.jakarta.servlet :as ring-servlet]
             [schema.core :as schema])
-  (:import [javax.servlet.http HttpServletRequest]
+  (:import [jakarta.servlet.http HttpServletRequest]
            [org.jolokia.config ConfigKey]
            [org.jolokia.util LogHandler]
            [org.jolokia.http AgentServlet]))
