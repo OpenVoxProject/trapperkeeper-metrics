@@ -41,4 +41,4 @@ The `trapperkeeper-comidi-metrics` repo contains a working example app that illu
 
 ## Support
 
-GitHub issues and PRs are welcome! Additionally, drop us a line in [the Vox Pupuli Slack](https://voxpupuli.slack.com).
+GitHub issues and PRs are welcome! Additionally, drop us a line in [the Vox Pupuli Slack](https://voxpupuli.org/connect/).
