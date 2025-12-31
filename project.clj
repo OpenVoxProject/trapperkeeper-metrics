@@ -8,7 +8,7 @@
 
   :pedantic? :abort
 
-  :parent-project {:coords [org.openvoxproject/clj-parent "7.4.1-SNAPSHOT"]
+  :parent-project {:coords [org.openvoxproject/clj-parent "7.5.0"]
                    :inherit [:managed-dependencies]}
 
   :dependencies [[org.clojure/clojure]
@@ -30,13 +30,13 @@
                  [org.openvoxproject/comidi]
                  [org.openvoxproject/i18n]]
 
-  :plugins [[org.openvoxproject/i18n "0.9.3-SNAPSHOT"]
+  :plugins [[org.openvoxproject/i18n "0.9.3"]
             [lein-parent "0.3.9"]]
 
   :source-paths  ["src/clj"]
   :java-source-paths  ["src/java"]
 
-  :deploy-repositories [["clojars" {:url "https://clojars.org/repo"
+  :deploy-repositories [["releases" {:url "https://clojars.org/repo"
                                      :username :env/CLOJARS_USERNAME
                                      :password :env/CLOJARS_PASSWORD
                                      :sign-releases false}]]
