@@ -8,7 +8,7 @@
 
   :pedantic? :abort
 
-  :parent-project {:coords [org.openvoxproject/clj-parent "7.5.0"]
+  :parent-project {:coords [org.openvoxproject/clj-parent "7.5.1"]
                    :inherit [:managed-dependencies]}
 
   :dependencies [[org.clojure/clojure]
@@ -30,7 +30,7 @@
                  [org.openvoxproject/comidi]
                  [org.openvoxproject/i18n]]
 
-  :plugins [[org.openvoxproject/i18n "0.9.3"]
+  :plugins [[org.openvoxproject/i18n "0.9.4"]
             [lein-parent "0.3.9"]]
 
   :source-paths  ["src/clj"]
