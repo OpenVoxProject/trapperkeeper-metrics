@@ -1,4 +1,4 @@
-(defproject org.openvoxproject/trapperkeeper-metrics "2.0.5-SNAPSHOT"
+(defproject org.openvoxproject/trapperkeeper-metrics "2.0.5"
   :description "Trapperkeeper Metrics Service"
   :url "http://github.com/openvoxproject/trapperkeeper-metrics"
   :license {:name "Apache License, Version 2.0"
