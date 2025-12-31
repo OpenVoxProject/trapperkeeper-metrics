@@ -1,6 +1,6 @@
-(defproject puppetlabs/trapperkeeper-metrics "2.0.5-SNAPSHOT"
+(defproject org.openvoxproject/trapperkeeper-metrics "2.0.5-SNAPSHOT"
   :description "Trapperkeeper Metrics Service"
-  :url "http://github.com/puppetlabs/trapperkeeper-metrics"
+  :url "http://github.com/openvoxproject/trapperkeeper-metrics"
   :license {:name "Apache License, Version 2.0"
               :url "http://www.apache.org/licenses/LICENSE-2.0.html"}
 
@@ -8,17 +8,17 @@
 
   :pedantic? :abort
 
-  :parent-project {:coords [puppetlabs/clj-parent "7.3.6"]
+  :parent-project {:coords [org.openvoxproject/clj-parent "7.5.1"]
                    :inherit [:managed-dependencies]}
 
   :dependencies [[org.clojure/clojure]
 
                  [prismatic/schema]
 
-                 [puppetlabs/kitchensink]
-                 [puppetlabs/trapperkeeper]
-                 [puppetlabs/trapperkeeper-authorization]
-                 [puppetlabs/ring-middleware]
+                 [org.openvoxproject/kitchensink]
+                 [org.openvoxproject/trapperkeeper]
+                 [org.openvoxproject/trapperkeeper-authorization]
+                 [org.openvoxproject/ring-middleware]
 
                  [cheshire]
                  [org.clojure/java.jmx]
@@ -27,26 +27,26 @@
                  [io.dropwizard.metrics/metrics-core]
                  [io.dropwizard.metrics/metrics-graphite]
                  [org.jolokia/jolokia-core "1.7.0"]
-                 [puppetlabs/comidi]
-                 [puppetlabs/i18n]]
+                 [org.openvoxproject/comidi]
+                 [org.openvoxproject/i18n]]
 
-  :plugins [[puppetlabs/i18n "0.9.2"]
+  :plugins [[org.openvoxproject/i18n "0.9.4"]
             [lein-parent "0.3.9"]]
 
   :source-paths  ["src/clj"]
   :java-source-paths  ["src/java"]
 
   :deploy-repositories [["releases" {:url "https://clojars.org/repo"
-                                     :username :env/clojars_jenkins_username
-                                     :password :env/clojars_jenkins_password
+                                     :username :env/CLOJARS_USERNAME
+                                     :password :env/CLOJARS_PASSWORD
                                      :sign-releases false}]]
 
   :classifiers  [["test" :testutils]]
 
-  :profiles {:defaults {:dependencies [[puppetlabs/http-client]
-                                       [puppetlabs/trapperkeeper :classifier "test"]
-                                       [com.puppetlabs/trapperkeeper-webserver-jetty10]
-                                       [puppetlabs/kitchensink :classifier "test"]]}
+  :profiles {:defaults {:dependencies [[org.openvoxproject/http-client]
+                                       [org.openvoxproject/trapperkeeper :classifier "test"]
+                                       [org.openvoxproject/trapperkeeper-webserver-jetty10]
+                                       [org.openvoxproject/kitchensink :classifier "test"]]}
              :dev-dependencies {:dependencies [[org.bouncycastle/bcpkix-jdk18on]]}
              :dev [:defaults :dev-dependencies]
              :fips-dependencies {:dependencies [[org.bouncycastle/bcpkix-fips]
@@ -54,15 +54,12 @@
                                                 [org.bouncycastle/bctls-fips]]
                                  :jvm-opts ~(let [version (System/getProperty "java.specification.version")
                                                   [major minor _] (clojure.string/split version #"\.")
-                                                  unsupported-ex (ex-info "Unsupported major Java version. Expects 8, 11 or 17."
+                                                  unsupported-ex (ex-info "Unsupported major Java version. Expects 17 or 21."
                                                                                {:major major
                                                                                 :minor minor})]
                                                  (condp = (java.lang.Integer/parseInt major)
-                                                   1 (if (= 8 (java.lang.Integer/parseInt minor))
-                                                       ["-Djava.security.properties==./dev-resources/java.security.jdk8-fips"]
-                                                       (throw unsupported-ex))
-                                                   11 ["-Djava.security.properties==./dev-resources/java.security.jdk11-fips"]
                                                    17 ["-Djava.security.properties==./dev-resources/java.security.jdk17-fips"]
+                                                   21 ["-Djava.security.properties==./dev-resources/java.security.jdk21-fips"]
                                                    (throw unsupported-ex)))}
              :fips [:defaults :fips-dependencies]
 
