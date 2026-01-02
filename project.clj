@@ -1,4 +1,4 @@
-(defproject org.openvoxproject/trapperkeeper-metrics "2.0.6-SNAPSHOT"
+(defproject org.openvoxproject/trapperkeeper-metrics "2.1.0-SNAPSHOT"
   :description "Trapperkeeper Metrics Service"
   :url "http://github.com/openvoxproject/trapperkeeper-metrics"
   :license {:name "Apache License, Version 2.0"
@@ -8,7 +8,7 @@
 
   :pedantic? :abort
 
-  :parent-project {:coords [org.openvoxproject/clj-parent "7.5.1"]
+  :parent-project {:coords [org.openvoxproject/clj-parent "7.6.3"]
                    :inherit [:managed-dependencies]}
 
   :dependencies [[org.clojure/clojure]
@@ -30,7 +30,7 @@
                  [org.openvoxproject/comidi]
                  [org.openvoxproject/i18n]]
 
-  :plugins [[org.openvoxproject/i18n "0.9.4"]
+  :plugins [[org.openvoxproject/i18n "1.0.2"]
             [lein-parent "0.3.9"]]
 
   :source-paths  ["src/clj"]
