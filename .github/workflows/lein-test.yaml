@@ -1,14 +1,15 @@
+---
 name: lein_test
 
 on:
-  workflow_dispatch:
+  pull_request: {}
   push:
     branches:
       - main
-    paths: ['src/**','test/**']
-  pull_request:
-    types: [opened, reopened, edited, synchronize]
-    paths: ['src/**','test/**','project.clj']
+
+permissions:
+  contents: read
+
 
 jobs:
   run-lein-tests:
@@ -44,3 +45,15 @@ jobs:
       #  run: lein with-profile fips test
       #  env:
       #    FIPS: true
+
+  tests:
+    if: always()
+    needs:
+      - run-lein-tests
+    runs-on: ubuntu-24.04
+    name: Test suite
+    steps:
+      - name: Decide whether the needed jobs succeeded or failed
+        uses: re-actors/alls-green@release/v1
+        with:
+          jobs: ${{ toJSON(needs) }}
