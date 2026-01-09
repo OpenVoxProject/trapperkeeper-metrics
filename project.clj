@@ -47,7 +47,7 @@
                  [org.clojure/tools.logging "1.3.1"]
                  [io.dropwizard.metrics/metrics-core ~dropwizard-metrics-version]
                  [io.dropwizard.metrics/metrics-graphite ~dropwizard-metrics-version]
-                 [org.jolokia/jolokia-core "1.7.0"]
+                 [org.jolokia/jolokia-core "1.7.2"]
                  [org.openvoxproject/comidi "1.1.1"]
                  [org.openvoxproject/i18n ~i18n-version]]
 
