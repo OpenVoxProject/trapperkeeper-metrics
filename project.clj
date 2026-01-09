@@ -1,3 +1,8 @@
+(def kitchensink-version "3.5.3")
+(def trapperkeeper-version "4.3.0")
+(def i18n-version "1.0.2")
+(def dropwizard-metrics-version "3.2.2")
+
 (defproject org.openvoxproject/trapperkeeper-metrics "2.1.1-SNAPSHOT"
   :description "Trapperkeeper Metrics Service"
   :url "http://github.com/openvoxproject/trapperkeeper-metrics"
@@ -8,30 +13,45 @@
 
   :pedantic? :abort
 
-  :parent-project {:coords [org.openvoxproject/clj-parent "7.6.3"]
-                   :inherit [:managed-dependencies]}
+  ;; These are to enforce consistent versions across dependencies of dependencies,
+  ;; and to avoid having to define versions in multiple places. If a component
+  ;; defined under :dependencies ends up causing an error due to :pedantic? :abort,
+  ;; because it is a dep of a dep with a different version, move it here.
+  :managed-dependencies [[org.clojure/clojure "1.12.4"]
+
+                         [ring/ring-core "1.8.2"]
+                         [ring/ring-codec "1.1.2"]
+
+                         [org.bouncycastle/bcpkix-jdk18on "1.83"]
+                         [org.bouncycastle/bcpkix-fips "1.0.8"]
+                         [org.bouncycastle/bc-fips "1.0.2.6"]
+                         [org.bouncycastle/bctls-fips "1.0.19"]
+  
+                         [org.openvoxproject/kitchensink ~kitchensink-version]
+                         [org.openvoxproject/kitchensink ~kitchensink-version :classifier "test"]
+                         [org.openvoxproject/trapperkeeper ~trapperkeeper-version]
+                         [org.openvoxproject/trapperkeeper ~trapperkeeper-version :classifier "test"]]
 
   :dependencies [[org.clojure/clojure]
 
-                 [prismatic/schema]
+                 [prismatic/schema "1.1.12"]
 
                  [org.openvoxproject/kitchensink]
                  [org.openvoxproject/trapperkeeper]
-                 [org.openvoxproject/trapperkeeper-authorization]
-                 [org.openvoxproject/ring-middleware]
+                 [org.openvoxproject/trapperkeeper-authorization "2.1.0"]
+                 [org.openvoxproject/ring-middleware "2.1.0"]
 
-                 [cheshire]
-                 [org.clojure/java.jmx]
+                 [cheshire "5.10.2"]
+                 [org.clojure/java.jmx "1.0.0"]
 
-                 [org.clojure/tools.logging]
-                 [io.dropwizard.metrics/metrics-core]
-                 [io.dropwizard.metrics/metrics-graphite]
+                 [org.clojure/tools.logging "1.2.4"]
+                 [io.dropwizard.metrics/metrics-core ~dropwizard-metrics-version]
+                 [io.dropwizard.metrics/metrics-graphite ~dropwizard-metrics-version]
                  [org.jolokia/jolokia-core "1.7.0"]
-                 [org.openvoxproject/comidi]
-                 [org.openvoxproject/i18n]]
+                 [org.openvoxproject/comidi "1.1.1"]
+                 [org.openvoxproject/i18n ~i18n-version]]
 
-  :plugins [[org.openvoxproject/i18n "1.0.2"]
-            [lein-parent "0.3.9"]]
+  :plugins [[org.openvoxproject/i18n ~i18n-version]]
 
   :source-paths  ["src/clj"]
   :java-source-paths  ["src/java"]
@@ -43,9 +63,9 @@
 
   :classifiers  [["test" :testutils]]
 
-  :profiles {:defaults {:dependencies [[org.openvoxproject/http-client]
+  :profiles {:defaults {:dependencies [[org.openvoxproject/http-client "2.2.0"]
                                        [org.openvoxproject/trapperkeeper :classifier "test"]
-                                       [org.openvoxproject/trapperkeeper-webserver-jetty10]
+                                       [org.openvoxproject/trapperkeeper-webserver-jetty10 "1.1.0"]
                                        [org.openvoxproject/kitchensink :classifier "test"]]}
              :dev-dependencies {:dependencies [[org.bouncycastle/bcpkix-jdk18on]]}
              :dev [:defaults :dev-dependencies]
