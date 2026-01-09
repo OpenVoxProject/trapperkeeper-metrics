@@ -44,7 +44,7 @@
                  [cheshire "5.10.2"]
                  [org.clojure/java.jmx "1.0.0"]
 
-                 [org.clojure/tools.logging "1.2.4"]
+                 [org.clojure/tools.logging "1.3.1"]
                  [io.dropwizard.metrics/metrics-core ~dropwizard-metrics-version]
                  [io.dropwizard.metrics/metrics-graphite ~dropwizard-metrics-version]
                  [org.jolokia/jolokia-core "1.7.0"]
