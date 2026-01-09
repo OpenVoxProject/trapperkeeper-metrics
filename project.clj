@@ -41,7 +41,7 @@
                  [org.openvoxproject/trapperkeeper-authorization "2.1.0"]
                  [org.openvoxproject/ring-middleware "2.1.0"]
 
-                 [cheshire "5.10.2"]
+                 [cheshire "5.13.0"]
                  [org.clojure/java.jmx "1.1.1"]
 
                  [org.clojure/tools.logging "1.3.1"]
