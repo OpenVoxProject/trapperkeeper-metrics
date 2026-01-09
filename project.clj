@@ -42,7 +42,7 @@
                  [org.openvoxproject/ring-middleware "2.1.0"]
 
                  [cheshire "5.10.2"]
-                 [org.clojure/java.jmx "1.0.0"]
+                 [org.clojure/java.jmx "1.1.1"]
 
                  [org.clojure/tools.logging "1.3.1"]
                  [io.dropwizard.metrics/metrics-core ~dropwizard-metrics-version]
