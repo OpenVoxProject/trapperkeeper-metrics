@@ -20,7 +20,7 @@
   :managed-dependencies [[org.clojure/clojure "1.12.4"]
 
                          [ring/ring-core "1.8.2"]
-                         [ring/ring-codec "1.1.2"]
+                         [ring/ring-codec "1.3.0"]
 
                          [org.bouncycastle/bcpkix-jdk18on "1.83"]
                          [org.bouncycastle/bcpkix-fips "1.0.8"]
