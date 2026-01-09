@@ -34,7 +34,7 @@
 
   :dependencies [[org.clojure/clojure]
 
-                 [prismatic/schema "1.1.12"]
+                 [prismatic/schema "1.4.1"]
 
                  [org.openvoxproject/kitchensink]
                  [org.openvoxproject/trapperkeeper]
