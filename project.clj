@@ -21,6 +21,7 @@
 
                          [ring/ring-core "1.15.3"]
                          [ring/ring-codec "1.3.0"]
+                         [commons-codec "1.20.0"]
 
                          [org.bouncycastle/bcpkix-jdk18on "1.83"]
                          [org.bouncycastle/bcpkix-fips "1.0.8"]
@@ -39,7 +40,7 @@
                  [org.openvoxproject/kitchensink]
                  [org.openvoxproject/trapperkeeper]
                  [org.openvoxproject/trapperkeeper-authorization "2.1.1"]
-                 [org.openvoxproject/ring-middleware "2.1.0"]
+                 [org.openvoxproject/ring-middleware "2.1.1"]
 
                  [cheshire "5.13.0"]
                  [org.clojure/java.jmx "1.1.1"]
