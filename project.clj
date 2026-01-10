@@ -38,7 +38,7 @@
 
                  [org.openvoxproject/kitchensink]
                  [org.openvoxproject/trapperkeeper]
-                 [org.openvoxproject/trapperkeeper-authorization "2.1.0"]
+                 [org.openvoxproject/trapperkeeper-authorization "2.1.1"]
                  [org.openvoxproject/ring-middleware "2.1.0"]
 
                  [cheshire "5.13.0"]
