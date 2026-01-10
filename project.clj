@@ -48,7 +48,7 @@
                  [io.dropwizard.metrics/metrics-core ~dropwizard-metrics-version]
                  [io.dropwizard.metrics/metrics-graphite ~dropwizard-metrics-version]
                  [org.jolokia/jolokia-core "1.7.2"]
-                 [org.openvoxproject/comidi "1.1.1"]
+                 [org.openvoxproject/comidi "1.1.2"]
                  [org.openvoxproject/i18n ~i18n-version]]
 
   :plugins [[org.openvoxproject/i18n ~i18n-version]]
