@@ -66,7 +66,7 @@
 
   :profiles {:defaults {:dependencies [[org.openvoxproject/http-client "2.2.2"]
                                        [org.openvoxproject/trapperkeeper :classifier "test"]
-                                       [org.openvoxproject/trapperkeeper-webserver-jetty10 "1.1.0"]
+                                       [org.openvoxproject/trapperkeeper-webserver-jetty10 "1.1.2"]
                                        [org.openvoxproject/kitchensink :classifier "test"]]}
              :dev-dependencies {:dependencies [[org.bouncycastle/bcpkix-jdk18on]]}
              :dev [:defaults :dev-dependencies]
