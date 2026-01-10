@@ -1,6 +1,6 @@
 (def kitchensink-version "3.5.4")
 (def trapperkeeper-version "4.3.0")
-(def i18n-version "1.0.2")
+(def i18n-version "1.0.3")
 (def dropwizard-metrics-version "3.2.6")
 
 (defproject org.openvoxproject/trapperkeeper-metrics "2.1.1-SNAPSHOT"
