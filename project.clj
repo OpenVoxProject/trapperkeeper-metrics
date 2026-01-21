@@ -33,7 +33,7 @@
                          [org.openvoxproject/i18n ~i18n-version]
                          [org.openvoxproject/kitchensink "3.5.5"]
                          [org.openvoxproject/kitchensink "3.5.5" :classifier "test"]
-                         [org.openvoxproject/ring-middleware "2.1.3"]
+                         [org.openvoxproject/ring-middleware "2.1.4"]
                          [org.openvoxproject/trapperkeeper "4.3.2"]
                          [org.openvoxproject/trapperkeeper "4.3.2" :classifier "test"]
                          [org.openvoxproject/trapperkeeper-authorization "2.1.5"]
