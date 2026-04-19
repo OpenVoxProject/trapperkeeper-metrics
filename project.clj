@@ -27,7 +27,7 @@
                          [org.bouncycastle/bcpkix-fips "1.0.8"]
                          [org.bouncycastle/bc-fips "1.0.2.6"]
                          [org.bouncycastle/bctls-fips "1.0.19"]
-                         [org.jolokia/jolokia-core "1.7.2"]
+                         [org.jolokia/jolokia-core "2.5.1"]
                          [org.openvoxproject/comidi "1.1.2"]
                          [org.openvoxproject/http-client "2.2.5"]
                          [org.openvoxproject/i18n ~i18n-version]
