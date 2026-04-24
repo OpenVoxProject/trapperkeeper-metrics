@@ -81,12 +81,13 @@
                                                 [org.bouncycastle/bctls-fips]]
                                  :jvm-opts ~(let [version (System/getProperty "java.specification.version")
                                                   [major minor _] (clojure.string/split version #"\.")
-                                                  unsupported-ex (ex-info "Unsupported major Java version. Expects 17 or 21."
+                                                  unsupported-ex (ex-info "Unsupported major Java version. Expects 17, 21 or 25."
                                                                                {:major major
                                                                                 :minor minor})]
                                                  (condp = (java.lang.Integer/parseInt major)
                                                    17 ["-Djava.security.properties==./dev-resources/java.security.jdk17-fips"]
                                                    21 ["-Djava.security.properties==./dev-resources/java.security.jdk21-fips"]
+                                                   25 ["-Djava.security.properties==./dev-resources/java.security.jdk25-fips"]
                                                    (throw unsupported-ex)))}
              :fips [:defaults :fips-dependencies]
 
