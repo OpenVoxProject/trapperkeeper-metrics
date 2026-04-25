@@ -19,7 +19,7 @@
                          [org.clojure/java.jmx "1.1.1"]
                          [org.clojure/tools.logging "1.3.1"]
                          [cheshire "6.2.0"]
-                         [commons-codec "1.21.0"]
+                         [commons-codec "1.22.0"]
                          [commons-io "2.22.0"]
                          [io.dropwizard.metrics/metrics-core ~dropwizard-metrics-version]
                          [io.dropwizard.metrics/metrics-graphite ~dropwizard-metrics-version]
