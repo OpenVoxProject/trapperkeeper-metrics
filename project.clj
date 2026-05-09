@@ -1,7 +1,7 @@
 (def i18n-version "1.0.4")
 (def dropwizard-metrics-version "3.2.6")
 
-(defproject org.openvoxproject/trapperkeeper-metrics "2.1.12-SNAPSHOT"
+(defproject org.openvoxproject/trapperkeeper-metrics "2.2.0-SNAPSHOT"
   :description "Trapperkeeper Metrics Service"
   :url "http://github.com/openvoxproject/trapperkeeper-metrics"
   :license {:name "Apache License, Version 2.0"
@@ -37,7 +37,7 @@
                          [org.openvoxproject/trapperkeeper "4.3.5"]
                          [org.openvoxproject/trapperkeeper "4.3.5" :classifier "test"]
                          [org.openvoxproject/trapperkeeper-authorization "2.1.10"]
-                         [org.openvoxproject/trapperkeeper-webserver-jetty10 "1.1.8"]
+                         [org.openvoxproject/trapperkeeper-webserver "10.0.0"]
                          [org.slf4j/slf4j-api "2.0.17"]
                          [prismatic/schema "1.4.1"]
                          [ring/ring-codec "1.3.0"]
@@ -73,7 +73,7 @@
   :profiles {:defaults {:dependencies [[org.openvoxproject/http-client]
                                        [org.openvoxproject/kitchensink :classifier "test"]
                                        [org.openvoxproject/trapperkeeper :classifier "test"]
-                                       [org.openvoxproject/trapperkeeper-webserver-jetty10]]}
+                                       [org.openvoxproject/trapperkeeper-webserver]]}
              :dev-dependencies {:dependencies [[org.bouncycastle/bcpkix-jdk18on]]}
              :dev [:defaults :dev-dependencies]
              :fips-dependencies {:dependencies [[org.bouncycastle/bcpkix-fips]
