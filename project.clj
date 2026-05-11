@@ -29,7 +29,7 @@
                          [org.bouncycastle/bctls-fips "1.0.19"]
                          [org.jolokia/jolokia-server-core "2.1.0"]
                          [org.jolokia/jolokia-service-jmx "2.1.0"]
-                         [org.jolokia/jolokia-service-serializer "2.1.0"]
+                         [org.jolokia/jolokia-service-serializer "2.6.0"]
                          [org.openvoxproject/comidi "1.1.3"]
                          [org.openvoxproject/http-client "2.3.0"]
                          [org.openvoxproject/i18n ~i18n-version]
