@@ -1,7 +1,7 @@
 (def i18n-version "1.0.4")
 (def dropwizard-metrics-version "3.2.6")
 
-(defproject org.openvoxproject/trapperkeeper-metrics "2.2.1-SNAPSHOT"
+(defproject org.openvoxproject/trapperkeeper-metrics "2.3.0-SNAPSHOT"
   :description "Trapperkeeper Metrics Service"
   :url "http://github.com/openvoxproject/trapperkeeper-metrics"
   :license {:name "Apache License, Version 2.0"
@@ -27,17 +27,19 @@
                          [org.bouncycastle/bcpkix-fips "1.0.8"]
                          [org.bouncycastle/bc-fips "1.0.2.6"]
                          [org.bouncycastle/bctls-fips "1.0.19"]
-                         [org.jolokia/jolokia-core "1.7.2"]
+                         [org.jolokia/jolokia-server-core "2.1.0"]
+                         [org.jolokia/jolokia-service-jmx "2.1.0"]
+                         [org.jolokia/jolokia-service-serializer "2.1.0"]
                          [org.openvoxproject/comidi "1.1.3"]
-                         [org.openvoxproject/http-client "2.2.7"]
+                         [org.openvoxproject/http-client "2.3.0"]
                          [org.openvoxproject/i18n ~i18n-version]
                          [org.openvoxproject/kitchensink "3.5.7"]
                          [org.openvoxproject/kitchensink "3.5.7" :classifier "test"]
-                         [org.openvoxproject/ring-middleware "2.1.7"]
-                         [org.openvoxproject/trapperkeeper "4.3.5"]
-                         [org.openvoxproject/trapperkeeper "4.3.5" :classifier "test"]
-                         [org.openvoxproject/trapperkeeper-authorization "2.1.10"]
-                         [org.openvoxproject/trapperkeeper-webserver "10.0.0"]
+                         [org.openvoxproject/ring-middleware "2.2.0"]
+                         [org.openvoxproject/trapperkeeper "5.0.0"]
+                         [org.openvoxproject/trapperkeeper "5.0.0" :classifier "test"]
+                         [org.openvoxproject/trapperkeeper-authorization "2.3.0"]
+                         [org.openvoxproject/trapperkeeper-webserver "12.0.0"]
                          [org.slf4j/slf4j-api "2.0.17"]
                          [prismatic/schema "1.4.1"]
                          [ring/ring-codec "1.3.0"]
@@ -49,7 +51,9 @@
                  [cheshire]
                  [io.dropwizard.metrics/metrics-core]
                  [io.dropwizard.metrics/metrics-graphite]
-                 [org.jolokia/jolokia-core]
+                 [org.jolokia/jolokia-server-core]
+                 [org.jolokia/jolokia-service-jmx]
+                 [org.jolokia/jolokia-service-serializer]
                  [org.openvoxproject/comidi]
                  [org.openvoxproject/i18n]
                  [org.openvoxproject/kitchensink]
