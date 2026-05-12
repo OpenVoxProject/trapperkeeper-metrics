@@ -5,8 +5,8 @@
             [ring.util.jakarta.servlet :as ring-servlet]
             [schema.core :as schema])
   (:import [jakarta.servlet.http HttpServletRequest]
+           [org.jolokia.core.api LogHandler]
            [org.jolokia.server.core.config ConfigKey]
-           [org.jolokia.server.core.service.api LogHandler]
            [org.jolokia.server.core.http AgentServlet]))
 
 
