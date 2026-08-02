@@ -1,10 +1,13 @@
 (ns puppetlabs.trapperkeeper.services.metrics.metrics-core
-  (:import (com.codahale.metrics JmxReporter MetricRegistry)
+  (:import (io.dropwizard.metrics5 MetricName MetricRegistry)
+           (io.dropwizard.metrics5.jmx JmxReporter)
+           (io.dropwizard.metrics5.jmx ObjectNameFactory)
            (com.fasterxml.jackson.core JsonParseException)
            (com.puppetlabs.trapperkeeper.metrics GraphiteReporter AllowedNamesMetricFilter)
            (java.util.concurrent TimeUnit)
            (java.net InetSocketAddress)
-           (com.codahale.metrics.graphite Graphite GraphiteSender))
+           (javax.management ObjectName)
+           (io.dropwizard.metrics5.graphite Graphite GraphiteSender))
   (:require [cheshire.core :as json]
             [clojure.java.io :as io]
             [puppetlabs.comidi :as comidi]
@@ -90,7 +93,15 @@
 (schema/defn jmx-reporter :- JmxReporter
   [registry :- MetricRegistry
    domain :- (schema/maybe schema/Keyword)]
-  (let [b (JmxReporter/forRegistry registry)]
+  (let [b (-> (JmxReporter/forRegistry registry)
+              (.createsObjectNamesWith
+               (reify ObjectNameFactory
+                 (createName [_ _type current-domain metric-name]
+                   ;; MetricName#getKey omits tags. If tagged metric names are ever introduced,
+                   ;; distinct metrics that share a key could collide on the same ObjectName.
+                   (ObjectName. (format "%s:name=%s"
+                                        current-domain
+                                        (.getKey ^MetricName metric-name)))))))]
     (when domain
       (.inDomain b (name domain)))
     (.build b)))
@@ -135,8 +146,8 @@
    graphite-sender :- GraphiteSender]
   (->
    (GraphiteReporter/forRegistry registry)
-   (.convertRatesTo (TimeUnit/MILLISECONDS))
-   (.convertDurationsTo (TimeUnit/MILLISECONDS))
+   (.convertRatesTo TimeUnit/MILLISECONDS)
+   (.convertDurationsTo TimeUnit/MILLISECONDS)
    (.filter (build-metric-filter metrics-allowed))
    (.build graphite-sender)))
 
@@ -146,9 +157,9 @@
    ;; would be nice to add the ability to register a function that could receive a callback when a
    ;; reporter is added, which could solve the problem of needing this extra argument solely for
    ;; testing (see PE-17010).
-   domain :- schema/Keyword]
-  (Graphite. (InetSocketAddress. (:host graphite-config)
-                                 (:port graphite-config))))
+   _domain :- schema/Keyword]
+  (Graphite. (InetSocketAddress. ^String (:host graphite-config)
+                                  (int (:port graphite-config)))))
 
 (schema/defn add-graphite-reporter :- RegistryContext
   "Adds a graphite reporter to the given registry context if graphite
@@ -163,7 +174,7 @@
           graphite-reporter (build-graphite-reporter (:registry registry-context)
                                                      metrics-allowed
                                                      graphite-sender)]
-      (.start graphite-reporter (:update-interval-seconds graphite-config) (TimeUnit/SECONDS))
+      (.start graphite-reporter (:update-interval-seconds graphite-config) TimeUnit/SECONDS)
       (assoc registry-context :graphite-reporter graphite-reporter))
     registry-context))
 
@@ -191,7 +202,12 @@
   (let [metric-prefix (get-metric-prefix metrics-config domain)
         default-metrics-allowed (get-in registry-settings [domain :default-metrics-allowed])
         configured-metrics-allowed (get-in metrics-config [:registries domain :metrics-allowed])
-        metrics-allowed (concat default-metrics-allowed configured-metrics-allowed)]
+        ;; Normalize user-provided metric names: replace wildcard "*" with
+        ;; the stable "ANY" token used in Dropwizard 5 metric names.
+        ;; This ensures legacy config entries like "http.puppet-v3-catalog-/*/-requests"
+        ;; continue to match the sanitized metric names.
+        normalized-configured (map #(clojure.string/replace % "*" "ANY") configured-metrics-allowed)
+        metrics-allowed (concat default-metrics-allowed normalized-configured)]
     (construct-metric-names metric-prefix metrics-allowed)))
 
 (schema/defn maybe-add-default-to-config :- MetricsConfig
@@ -323,7 +339,7 @@
         (comidi/context "/v1"
             (comidi/context "/mbeans"
                 (comidi/GET "" []
-                  (fn [req]
+                  (fn [_req]
                     (ringutils/json-response 200
                                              (metrics-utils/mbean-names))))
               (comidi/POST "" []
@@ -352,7 +368,7 @@
                       (ringutils/json-response 400 {:error (str e)})))))
 
               (comidi/GET ["/" [#".*" :names]] []
-                (fn [{:keys [route-params] :as req}]
+                (fn [{:keys [route-params] :as _req}]
                   (let [name (java.net.URLDecoder/decode (:names route-params))]
                     (if-let [mbean (metrics-utils/get-mbean name)]
                       (ringutils/json-response 200 mbean)

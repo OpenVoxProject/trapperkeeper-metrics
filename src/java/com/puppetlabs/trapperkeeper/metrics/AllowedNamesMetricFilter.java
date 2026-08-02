@@ -1,7 +1,8 @@
 package com.puppetlabs.trapperkeeper.metrics;
 
-import com.codahale.metrics.Metric;
-import com.codahale.metrics.MetricFilter;
+import io.dropwizard.metrics5.Metric;
+import io.dropwizard.metrics5.MetricFilter;
+import io.dropwizard.metrics5.MetricName;
 
 import java.util.Set;
 
@@ -14,9 +15,9 @@ public class AllowedNamesMetricFilter implements MetricFilter{
     }
 
     @Override
-    public boolean matches(String name, Metric metric) {
+    public boolean matches(MetricName name, Metric metric) {
         if (allowedMetricNames.isEmpty()) {
             return true;
-        } else return allowedMetricNames.contains(name);
+        } else return allowedMetricNames.contains(name.getKey());
     }
 }

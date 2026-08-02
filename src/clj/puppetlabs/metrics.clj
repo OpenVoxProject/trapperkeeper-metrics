@@ -1,8 +1,8 @@
 ;; Utility functions for working with the Metrics library
 
 (ns puppetlabs.metrics
-  (:import (com.codahale.metrics MetricRegistry RatioGauge RatioGauge$Ratio
-                                 Gauge Metric Metered Sampling Timer)
+  (:import (io.dropwizard.metrics5 MetricRegistry MetricName RatioGauge RatioGauge$Ratio
+                                   Gauge Metric Metered Sampling Timer)
            (java.util.concurrent TimeUnit))
   (:require [schema.core :as schema]))
 
@@ -14,21 +14,23 @@
   Metrics."
   [hostname :- schema/Str
    metric-name :- schema/Str]
-  (MetricRegistry/name "puppetlabs" (into-array String [hostname metric-name])))
+  (-> (MetricRegistry/name "puppetlabs" (into-array String [hostname metric-name]))
+      (.getKey)))
 
 (schema/defn ^:always-validate http-metric-name :- schema/Str
   "Given a hostname and a metric name, build a qualified http metric name for use
   with Metrics."
   [hostname :- schema/Str
    metric-name :- schema/Str]
-  (MetricRegistry/name "puppetlabs" (into-array String [hostname "http" metric-name])))
+  (-> (MetricRegistry/name "puppetlabs" (into-array String [hostname "http" metric-name]))
+      (.getKey)))
 
 (schema/defn ^:always-validate register :- Metric
   "Register a metric with a metrics registry, using the given metric name."
   [registry :- MetricRegistry
    metric-name :- schema/Str
    metric :- Metric]
-  (.register registry metric-name metric))
+  (.register registry (MetricName/parse metric-name) metric))
 
 (schema/defn mean :- Double
   "Given a Timer or Histogram object, get the current mean value."

@@ -1,5 +1,5 @@
 (ns puppetlabs.trapperkeeper.services.metrics.metrics-testutils
-  (:import (com.codahale.metrics.graphite GraphiteSender))
+  (:import (io.dropwizard.metrics5.graphite GraphiteSender))
   (:require [schema.core :as schema]))
 
 (def graphite-config
