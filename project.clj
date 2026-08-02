@@ -38,7 +38,7 @@
                          [org.openvoxproject/ring-middleware "2.2.0"]
                          [org.openvoxproject/trapperkeeper "5.0.4"]
                          [org.openvoxproject/trapperkeeper "5.0.4" :classifier "test"]
-                         [org.openvoxproject/trapperkeeper-authorization "2.3.0"]
+                         [org.openvoxproject/trapperkeeper-authorization "2.4.0"]
                          [org.openvoxproject/trapperkeeper-webserver "12.0.3"]
                          [org.slf4j/slf4j-api "2.0.18"]
                          [prismatic/schema "1.4.1"]
