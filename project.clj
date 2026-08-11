@@ -1,7 +1,7 @@
 (def i18n-version "1.0.5")
 (def dropwizard-metrics-version "3.2.6")
 
-(defproject org.openvoxproject/trapperkeeper-metrics "2.3.2"
+(defproject org.openvoxproject/trapperkeeper-metrics "2.3.3-SNAPSHOT"
   :description "Trapperkeeper Metrics Service"
   :url "http://github.com/openvoxproject/trapperkeeper-metrics"
   :license {:name "Apache License, Version 2.0"
