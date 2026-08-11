@@ -31,7 +31,7 @@
                          [org.jolokia/jolokia-service-jmx "2.6.1"]
                          [org.jolokia/jolokia-service-serializer "2.6.1"]
                          [org.openvoxproject/comidi "1.1.4"]
-                         [org.openvoxproject/http-client "2.4.0"]
+                         [org.openvoxproject/http-client "2.4.1"]
                          [org.openvoxproject/i18n ~i18n-version]
                          [org.openvoxproject/kitchensink "3.5.8"]
                          [org.openvoxproject/kitchensink "3.5.8" :classifier "test"]
