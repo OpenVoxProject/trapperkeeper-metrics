@@ -1,5 +1,6 @@
 (ns puppetlabs.trapperkeeper.services.metrics.metrics-service-test
-  (:import (com.codahale.metrics MetricRegistry JmxReporter)
+  (:import (io.dropwizard.metrics5 MetricRegistry)
+           (io.dropwizard.metrics5.jmx JmxReporter)
            (clojure.lang ExceptionInfo)
            (com.puppetlabs.trapperkeeper.metrics GraphiteReporter))
   (:require [clojure.test :refer :all]
@@ -152,7 +153,7 @@
                                                     (str (name domain) ":name=puppetlabs.localhost." metric)))))
                 resp (register-and-get-metric :pl.test.reg "foo")]
             (is (= 200 (:status resp)))
-            (is (= {"Value" 2} (parse-response resp)))))
+            (is (= {"Value" 2, "Number" 2} (parse-response resp)))))
 
         (testing "querying multiple metrics via POST should work"
           (let [svc (app/get-service app :MetricsService)
@@ -171,7 +172,7 @@
                                  "pl.other.reg:name=puppetlabs.localhost.bar"])})
                   body (parse-response resp)]
               (is (= 200 (:status resp)))
-              (is (= [{"Value" 2} {"Value" 500}] body)))
+              (is (= [{"Value" 2, "Number" 2} {"Value" 500, "Number" 500}] body)))
 
             (let [resp (http-client/post
                         "http://localhost:8180/metrics/v1/mbeans"
@@ -180,8 +181,8 @@
                                  :bar "pl.other.reg:name=puppetlabs.localhost.bar"})})
                   body (parse-response resp)]
               (is (= 200 (:status resp)))
-              (is (= {"foo" {"Value" 2}
-                      "bar" {"Value" 500}} body)))
+              (is (= {"foo" {"Value" 2, "Number" 2}
+                       "bar" {"Value" 500, "Number" 500}} body)))
 
             (let [resp (http-client/post
                         "http://localhost:8180/metrics/v1/mbeans"
@@ -189,7 +190,7 @@
                                 "pl.other.reg:name=puppetlabs.localhost.foo")})
                   body (parse-response resp)]
               (is (= 200 (:status resp)))
-              (is (= {"Value" 2} body)))
+              (is (= {"Value" 2, "Number" 2} body)))
 
             (let [resp (http-client/post
                         "http://localhost:8180/metrics/v1/mbeans"
@@ -205,7 +206,7 @@
                                   {:type "read" :mbean "pl.other.reg:name=puppetlabs.localhost.bar"}])})
                   body (parse-response resp true)]
               (is (= [200 200] (map :status body)))
-              (is (= [{:Value 2} {:Value 500}] (map :value body))))))
+              (is (= [2 500] (map #(get-in % [:value :Value]) body))))))
 
         (testing "metrics/v2 should deny write requests"
           (let [resp (http-client/get

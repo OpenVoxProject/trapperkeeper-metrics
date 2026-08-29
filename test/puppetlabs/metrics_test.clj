@@ -1,5 +1,5 @@
 (ns puppetlabs.metrics-test
-  (:import (com.codahale.metrics MetricRegistry Meter Timer)
+  (:import (io.dropwizard.metrics5 MetricRegistry Meter Timer)
            (java.util.concurrent TimeUnit))
   (:require [clojure.test :refer :all]
             [puppetlabs.metrics :refer :all]
@@ -21,7 +21,7 @@
       (register registry (host-metric-name "localhost" "foo") (gauge 2))
       (let [gauges (.getGauges registry)]
         (is (= 1 (count gauges)))
-        (is (= "puppetlabs.localhost.foo" (first (.keySet gauges))))))))
+        (is (= "puppetlabs.localhost.foo" (.getKey (first (.keySet gauges)))))))))
 
 (deftest test-mean-utils
   (let [timer (Timer.)]
