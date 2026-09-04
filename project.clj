@@ -40,7 +40,7 @@
                          [org.openvoxproject/trapperkeeper "5.0.5" :classifier "test"]
                          [org.openvoxproject/trapperkeeper-authorization "2.4.1"]
                          [org.openvoxproject/trapperkeeper-webserver "12.1.1"]
-                         [org.slf4j/slf4j-api "2.0.18"]
+                         [org.slf4j/slf4j-api "2.0.19"]
                          [prismatic/schema "1.4.2"]
                          [ring/ring-codec "1.3.0"]
                          [ring/ring-core "1.15.5"]]
