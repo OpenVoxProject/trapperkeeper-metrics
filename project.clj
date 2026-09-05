@@ -26,7 +26,7 @@
                          [org.bouncycastle/bcpkix-jdk18on "1.84"]
                          [org.bouncycastle/bcpkix-fips "1.0.8"]
                          [org.bouncycastle/bc-fips "1.0.2.6"]
-                         [org.bouncycastle/bctls-fips "1.0.19"]
+                         [org.bouncycastle/bctls-fips "1.0.24"]
                          [org.jolokia/jolokia-server-core "2.6.2"]
                          [org.jolokia/jolokia-service-jmx "2.6.2"]
                          [org.jolokia/jolokia-service-serializer "2.6.2"]
