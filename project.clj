@@ -1,5 +1,5 @@
 (def i18n-version "1.0.5")
-(def dropwizard-metrics-version "3.2.6")
+(def dropwizard-metrics-version "5.0.7")
 
 (defproject org.openvoxproject/trapperkeeper-metrics "2.3.3-SNAPSHOT"
   :description "Trapperkeeper Metrics Service"
@@ -21,8 +21,9 @@
                          [cheshire "6.2.0"]
                          [commons-codec "1.22.1"]
                          [commons-io "2.22.0"]
-                         [io.dropwizard.metrics/metrics-core ~dropwizard-metrics-version]
-                         [io.dropwizard.metrics/metrics-graphite ~dropwizard-metrics-version]
+                         [io.dropwizard.metrics5/metrics-core ~dropwizard-metrics-version]
+                         [io.dropwizard.metrics5/metrics-graphite ~dropwizard-metrics-version]
+                         [io.dropwizard.metrics5/metrics-jmx ~dropwizard-metrics-version]
                          [org.bouncycastle/bcpkix-jdk18on "1.84"]
                          [org.bouncycastle/bcpkix-fips "1.0.8"]
                          [org.bouncycastle/bc-fips "1.0.2.6"]
@@ -49,8 +50,9 @@
                  [org.clojure/java.jmx]
                  [org.clojure/tools.logging]
                  [cheshire]
-                 [io.dropwizard.metrics/metrics-core]
-                 [io.dropwizard.metrics/metrics-graphite]
+                 [io.dropwizard.metrics5/metrics-core]
+                 [io.dropwizard.metrics5/metrics-graphite]
+                 [io.dropwizard.metrics5/metrics-jmx]
                  [org.jolokia/jolokia-server-core]
                  [org.jolokia/jolokia-service-jmx]
                  [org.jolokia/jolokia-service-serializer]

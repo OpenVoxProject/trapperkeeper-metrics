@@ -1,5 +1,6 @@
 (ns puppetlabs.trapperkeeper.services.metrics.metrics-core-test
-  (:import (com.codahale.metrics MetricRegistry JmxReporter)
+  (:import (io.dropwizard.metrics5 MetricName MetricRegistry)
+           (io.dropwizard.metrics5.jmx JmxReporter)
            (com.puppetlabs.trapperkeeper.metrics GraphiteReporter)
            (clojure.lang ExceptionInfo))
   (:require [clojure.test :refer :all]
@@ -287,11 +288,22 @@
     (testing "returns empty set for registry not in config"
       (is (= #{} (core/get-metrics-allowed config {} :not-in-config))))
     (testing "returns empty set when there is no registry config"
-      (is (= #{} (core/get-metrics-allowed {:server-id "localhost"} {} :not-in-config))))))
+      (is (= #{} (core/get-metrics-allowed {:server-id "localhost"} {} :not-in-config))))
+    (testing "normalizes wildcard * to ANY in user-configured metrics-allowed"
+      (let [config-with-wildcard (utils/build-config-with-registries
+                                  {:with-wildcard {:metrics-allowed
+                                                   ["http.puppet-v3-catalog-/*/-requests"
+                                                    "http.puppet-v3-node-/*/-percentage"
+                                                    "http.no-wildcard-here"]}})]
+        (is (= #{"puppetlabs.localhost.http.puppet-v3-catalog-/ANY/-requests"
+                 "puppetlabs.localhost.http.puppet-v3-node-/ANY/-percentage"
+                 "puppetlabs.localhost.http.no-wildcard-here"}
+               (core/get-metrics-allowed config-with-wildcard {} :with-wildcard))
+            "User config entries containing '*' should be normalized to 'ANY' to match Dropwizard 5 sanitized metric names")))))
 
 (deftest ^:unit allowed-names-metrics-filter-match-test
   ; Wrap .matches so nil doesn't have to be passed every time
-  (let [matches (fn [metric-filter name] (.matches metric-filter name nil))]
+  (let [matches (fn [metric-filter name] (.matches metric-filter (MetricName/parse name) nil))]
     (let [metrics-allowed #{"foo"
                             "example.domain"
                             "example.domain.more.specific"
@@ -346,6 +358,7 @@
 
     (testing "Graphite reporter sends desired histogram fields"
       (is (utils/reported? @reported-metrics "test-histogram.mean"))
+      (is (utils/reported? @reported-metrics "test-histogram.sum"))
       (is (utils/reported? @reported-metrics "test-histogram.min"))
       (is (utils/reported? @reported-metrics "test-histogram.max"))
       (is (utils/reported? @reported-metrics "test-histogram.stddev"))

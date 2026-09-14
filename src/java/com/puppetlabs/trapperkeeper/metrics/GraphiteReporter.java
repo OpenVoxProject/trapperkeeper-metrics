@@ -1,30 +1,31 @@
 package com.puppetlabs.trapperkeeper.metrics;
 
-import com.codahale.metrics.Clock;
-import com.codahale.metrics.Counter;
-import com.codahale.metrics.Gauge;
-import com.codahale.metrics.Histogram;
-import com.codahale.metrics.Meter;
-import com.codahale.metrics.Metered;
-import com.codahale.metrics.MetricFilter;
-import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.ScheduledReporter;
-import com.codahale.metrics.Snapshot;
-import com.codahale.metrics.Timer;
-import com.codahale.metrics.graphite.Graphite;
-import com.codahale.metrics.graphite.GraphiteSender;
+import io.dropwizard.metrics5.Clock;
+import io.dropwizard.metrics5.Counter;
+import io.dropwizard.metrics5.Gauge;
+import io.dropwizard.metrics5.Histogram;
+import io.dropwizard.metrics5.Meter;
+import io.dropwizard.metrics5.Metered;
+import io.dropwizard.metrics5.MetricFilter;
+import io.dropwizard.metrics5.MetricName;
+import io.dropwizard.metrics5.MetricRegistry;
+import io.dropwizard.metrics5.ScheduledReporter;
+import io.dropwizard.metrics5.Snapshot;
+import io.dropwizard.metrics5.Timer;
+import io.dropwizard.metrics5.graphite.Graphite;
+import io.dropwizard.metrics5.graphite.GraphiteSender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Locale;
-import java.util.Map;
+import java.util.Objects;
 import java.util.SortedMap;
 import java.util.concurrent.TimeUnit;
 
 /**
  * A reporter which publishes metric values to a Graphite server.
- * A modified version of {@link com.codahale.metrics.graphite.GraphiteReporter}, which sends a reduced set of statistics
+ * A modified version of {@link io.dropwizard.metrics5.graphite.GraphiteReporter}, which sends a reduced set of statistics
  * for {@link Timer} and {@link Histogram} metrics
  *
  * @see <a href="http://graphite.wikidot.com/">Graphite - Scalable Realtime Graphing</a>
@@ -47,19 +48,14 @@ public class GraphiteReporter extends ScheduledReporter {
      */
     public static class Builder {
         private final MetricRegistry registry;
-        private Clock clock;
+        private Clock clock = Clock.defaultClock();
         private String prefix;
-        private TimeUnit rateUnit;
-        private TimeUnit durationUnit;
-        private MetricFilter filter;
+        private TimeUnit rateUnit = TimeUnit.MILLISECONDS;
+        private TimeUnit durationUnit = TimeUnit.MILLISECONDS;
+        private MetricFilter filter = MetricFilter.ALL;
 
         private Builder(MetricRegistry registry) {
-            this.registry = registry;
-            this.clock = Clock.defaultClock();
-            this.prefix = null;
-            this.rateUnit = TimeUnit.SECONDS;
-            this.durationUnit = TimeUnit.MILLISECONDS;
-            this.filter = MetricFilter.ALL;
+            this.registry = Objects.requireNonNull(registry, "Registry cannot be null");
         }
 
         /**
@@ -69,7 +65,7 @@ public class GraphiteReporter extends ScheduledReporter {
          * @return {@code this}
          */
         public Builder withClock(Clock clock) {
-            this.clock = clock;
+            this.clock = Objects.requireNonNull(clock);
             return this;
         }
 
@@ -91,7 +87,7 @@ public class GraphiteReporter extends ScheduledReporter {
          * @return {@code this}
          */
         public Builder convertRatesTo(TimeUnit rateUnit) {
-            this.rateUnit = rateUnit;
+            this.rateUnit = Objects.requireNonNull(rateUnit);
             return this;
         }
 
@@ -102,7 +98,7 @@ public class GraphiteReporter extends ScheduledReporter {
          * @return {@code this}
          */
         public Builder convertDurationsTo(TimeUnit durationUnit) {
-            this.durationUnit = durationUnit;
+            this.durationUnit = Objects.requireNonNull(durationUnit);
             return this;
         }
 
@@ -113,7 +109,7 @@ public class GraphiteReporter extends ScheduledReporter {
          * @return {@code this}
          */
         public Builder filter(MetricFilter filter) {
-            this.filter = filter;
+            this.filter = Objects.requireNonNull(filter);
             return this;
         }
 
@@ -162,52 +158,51 @@ public class GraphiteReporter extends ScheduledReporter {
                              TimeUnit durationUnit,
                              MetricFilter filter) {
         super(registry, "graphite-reporter", filter, rateUnit, durationUnit);
-        this.graphite = graphite;
+        this.graphite = Objects.requireNonNull(graphite, "GraphiteSender cannot be null");
         this.clock = clock;
         this.prefix = prefix;
     }
 
     @Override
-    public void report(SortedMap<String, Gauge> gauges,
-                       SortedMap<String, Counter> counters,
-                       SortedMap<String, Histogram> histograms,
-                       SortedMap<String, Meter> meters,
-                       SortedMap<String, Timer> timers) {
+    public void report(SortedMap<MetricName, Gauge<?>> gauges,
+                       SortedMap<MetricName, Counter> counters,
+                       SortedMap<MetricName, Histogram> histograms,
+                       SortedMap<MetricName, Meter> meters,
+                       SortedMap<MetricName, Timer> timers) {
         final long timestamp = clock.getTime() / 1000;
 
-        // oh it'd be lovely to use Java 7 here
         try {
             if (!graphite.isConnected()) {
                 graphite.connect();
             }
 
-            for (Map.Entry<String, Gauge> entry : gauges.entrySet()) {
+            for (var entry : gauges.entrySet()) {
                 reportGauge(entry.getKey(), entry.getValue(), timestamp);
             }
 
-            for (Map.Entry<String, Counter> entry : counters.entrySet()) {
+            for (var entry : counters.entrySet()) {
                 reportCounter(entry.getKey(), entry.getValue(), timestamp);
             }
 
-            for (Map.Entry<String, Histogram> entry : histograms.entrySet()) {
+            for (var entry : histograms.entrySet()) {
                 reportHistogram(entry.getKey(), entry.getValue(), timestamp);
             }
 
-            for (Map.Entry<String, Meter> entry : meters.entrySet()) {
+            for (var entry : meters.entrySet()) {
                 reportMetered(entry.getKey(), entry.getValue(), timestamp);
             }
 
-            for (Map.Entry<String, Timer> entry : timers.entrySet()) {
+            for (var entry : timers.entrySet()) {
                 reportTimer(entry.getKey(), entry.getValue(), timestamp);
             }
 
             graphite.flush();
         } catch (IOException e) {
-            LOGGER.warn("Unable to report to Graphite", graphite, e);
+            LOGGER.warn("Unable to report to Graphite: {}", graphite, e);
             try {
-                graphite.close();
+                graphite.close(); // Clean up connection on write failures
             } catch (IOException e1) {
-                LOGGER.warn("Error closing Graphite", graphite, e1);
+                LOGGER.warn("Error closing Graphite connection after report failure: {}", graphite, e1);
             }
         }
     }
@@ -220,12 +215,12 @@ public class GraphiteReporter extends ScheduledReporter {
             try {
                 graphite.close();
             } catch (IOException e) {
-                LOGGER.debug("Error disconnecting from Graphite", graphite, e);
+                LOGGER.debug("Error disconnecting from Graphite during shutdown: {}", graphite, e);
             }
         }
     }
 
-    private void reportTimer(String name, Timer timer, long timestamp) throws IOException {
+    private void reportTimer(MetricName name, Timer timer, long timestamp) throws IOException {
         final Snapshot snapshot = timer.getSnapshot();
 
         graphite.send(prefix(name, "max"), format(convertDuration(snapshot.getMax())), timestamp);
@@ -247,13 +242,14 @@ public class GraphiteReporter extends ScheduledReporter {
         reportMetered(name, timer, timestamp);
     }
 
-    private void reportMetered(String name, Metered meter, long timestamp) throws IOException {
+    private void reportMetered(MetricName name, Metered meter, long timestamp) throws IOException {
         graphite.send(prefix(name, "count"), format(meter.getCount()), timestamp);
     }
 
-    private void reportHistogram(String name, Histogram histogram, long timestamp) throws IOException {
+    private void reportHistogram(MetricName name, Histogram histogram, long timestamp) throws IOException {
         final Snapshot snapshot = histogram.getSnapshot();
         graphite.send(prefix(name, "count"), format(histogram.getCount()), timestamp);
+        graphite.send(prefix(name, "sum"), format(histogram.getSum()), timestamp);
         graphite.send(prefix(name, "max"), format(snapshot.getMax()), timestamp);
         graphite.send(prefix(name, "mean"), format(snapshot.getMean()), timestamp);
         graphite.send(prefix(name, "min"), format(snapshot.getMin()), timestamp);
@@ -263,11 +259,11 @@ public class GraphiteReporter extends ScheduledReporter {
         graphite.send(prefix(name, "p95"), format(snapshot.get95thPercentile()), timestamp);
     }
 
-    private void reportCounter(String name, Counter counter, long timestamp) throws IOException {
+    private void reportCounter(MetricName name, Counter counter, long timestamp) throws IOException {
         graphite.send(prefix(name, "count"), format(counter.getCount()), timestamp);
     }
 
-    private void reportGauge(String name, Gauge gauge, long timestamp) throws IOException {
+    private void reportGauge(MetricName name, Gauge<?> gauge, long timestamp) throws IOException {
         final String value = format(gauge.getValue());
         if (value != null) {
             graphite.send(prefix(name), value, timestamp);
@@ -275,24 +271,37 @@ public class GraphiteReporter extends ScheduledReporter {
     }
 
     private String format(Object o) {
-        if (o instanceof Float) {
-            return format(((Float) o).doubleValue());
-        } else if (o instanceof Double) {
-            return format(((Double) o).doubleValue());
-        } else if (o instanceof Byte) {
-            return format(((Byte) o).longValue());
-        } else if (o instanceof Short) {
-            return format(((Short) o).longValue());
-        } else if (o instanceof Integer) {
-            return format(((Integer) o).longValue());
-        } else if (o instanceof Long) {
-            return format(((Long) o).longValue());
+        if (o == null) {
+            return null;
         }
+
+        // Pattern matching for instanceof (Standardized in Java 16+)
+        // NOTE: We must call .doubleValue()/.longValue() explicitly to invoke the
+        // primitive overloads format(double)/format(long). Without explicit unboxing,
+        // Java overload resolution picks format(Object) (widening) over format(long)
+        // (unboxing), causing infinite recursion and StackOverflowError.
+        if (o instanceof Float f) {
+            return format(f.doubleValue());
+        } else if (o instanceof Double d) {
+            return format(d.doubleValue());
+        } else if (o instanceof Byte b) {
+            return format(b.longValue());
+        } else if (o instanceof Short s) {
+            return format(s.longValue());
+        } else if (o instanceof Integer i) {
+            return format(i.longValue());
+        } else if (o instanceof Long l) {
+            return format(l.longValue());
+        }
+
         return null;
     }
 
-    private String prefix(String... components) {
-        return MetricRegistry.name(prefix, components);
+    private String prefix(MetricName name, String... components) {
+        if (components.length == 0) {
+            return MetricRegistry.name(prefix, name.getKey()).getKey();
+        }
+        return MetricRegistry.name(prefix, name.getKey(), String.join(".", components)).getKey();
     }
 
     private String format(long n) {
