@@ -40,6 +40,7 @@
                          [org.openvoxproject/trapperkeeper "5.0.5" :classifier "test"]
                          [org.openvoxproject/trapperkeeper-authorization "2.4.1"]
                          [org.openvoxproject/trapperkeeper-webserver "12.1.1"]
+                         [org.ring-clojure/ring-jakarta-servlet "1.15.5"]
                          [org.slf4j/slf4j-api "2.0.19"]
                          [prismatic/schema "1.4.2"]
                          [ring/ring-codec "1.3.0"]
@@ -60,6 +61,7 @@
                  [org.openvoxproject/ring-middleware]
                  [org.openvoxproject/trapperkeeper]
                  [org.openvoxproject/trapperkeeper-authorization]
+                 [org.ring-clojure/ring-jakarta-servlet]
                  [prismatic/schema]]
 
   :plugins [[org.openvoxproject/i18n ~i18n-version]]
