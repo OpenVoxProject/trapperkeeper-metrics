@@ -70,6 +70,7 @@
                         (core/build-handler (get-route this))))
 
     (when (get-in-config [:metrics :metrics-webservice :jolokia :enabled] true)
+      (log/warn "The v2 metrics endpoint (Jolokia) is deprecated and will be removed in a future release.")
       (let [config (->> (get-in-config [:metrics :metrics-webservice :jolokia :servlet-init-params] {})
                         jolokia/create-servlet-config)
             ;; NOTE: Normally, these route and server lookups would be done by
