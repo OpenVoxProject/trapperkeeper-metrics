@@ -24,9 +24,10 @@
                          [io.dropwizard.metrics/metrics-core ~dropwizard-metrics-version]
                          [io.dropwizard.metrics/metrics-graphite ~dropwizard-metrics-version]
                          [org.bouncycastle/bcpkix-jdk18on "1.86"]
-                         [org.bouncycastle/bcpkix-fips "1.0.8"]
-                         [org.bouncycastle/bc-fips "1.0.2.6"]
-                         [org.bouncycastle/bctls-fips "1.0.19"]
+                         [org.bouncycastle/bcpkix-fips "2.1.13"]
+                         [org.bouncycastle/bc-fips "2.1.3"]
+                         [org.bouncycastle/bctls-fips "2.1.25"]
+                         [org.bouncycastle/bcutil-fips "2.1.8"]
                          [org.jolokia/jolokia-server-core "2.6.3"]
                          [org.jolokia/jolokia-service-jmx "2.6.3"]
                          [org.jolokia/jolokia-service-serializer "2.6.3"]
@@ -84,7 +85,8 @@
              :dev [:defaults :dev-dependencies]
              :fips-dependencies {:dependencies [[org.bouncycastle/bcpkix-fips]
                                                 [org.bouncycastle/bc-fips]
-                                                [org.bouncycastle/bctls-fips]]
+                                                [org.bouncycastle/bctls-fips]
+                                                [org.bouncycastle/bcutil-fips]]
                                  :jvm-opts ~(let [version (System/getProperty "java.specification.version")
                                                   [major minor _] (clojure.string/split version #"\.")
                                                   unsupported-ex (ex-info "Unsupported major Java version. Expects 17, 21 or 25."
