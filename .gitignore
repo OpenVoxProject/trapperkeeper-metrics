@@ -14,3 +14,7 @@ pom.xml.asc
 /dev-resources/i18n/bin
 /resources/**/Messages*.class
 /.idea
+/.bundle
+/.vendor
+/vendor
+/Gemfile.lock
