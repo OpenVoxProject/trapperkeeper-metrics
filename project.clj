@@ -1,5 +1,5 @@
 (def i18n-version "1.0.6")
-(def dropwizard-metrics-version "3.2.6")
+(def dropwizard-metrics-version "4.2.40")
 (def jolokia-version "2.6.4")
 
 (defproject org.openvoxproject/trapperkeeper-metrics "2.3.4-SNAPSHOT"
