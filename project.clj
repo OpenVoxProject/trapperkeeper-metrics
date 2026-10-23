@@ -1,5 +1,6 @@
 (def i18n-version "1.0.6")
 (def dropwizard-metrics-version "3.2.6")
+(def jolokia-version "2.6.4")
 
 (defproject org.openvoxproject/trapperkeeper-metrics "2.3.4-SNAPSHOT"
   :description "Trapperkeeper Metrics Service"
@@ -28,9 +29,9 @@
                          [org.bouncycastle/bc-fips "2.1.3"]
                          [org.bouncycastle/bctls-fips "2.1.25"]
                          [org.bouncycastle/bcutil-fips "2.1.8"]
-                         [org.jolokia/jolokia-server-core "2.6.3"]
-                         [org.jolokia/jolokia-service-jmx "2.6.3"]
-                         [org.jolokia/jolokia-service-serializer "2.6.3"]
+                         [org.jolokia/jolokia-server-core ~jolokia-version]
+                         [org.jolokia/jolokia-service-jmx ~jolokia-version]
+                         [org.jolokia/jolokia-service-serializer ~jolokia-version]
                          [org.openvoxproject/comidi "1.1.4"]
                          [org.openvoxproject/http-client "2.4.1"]
                          [org.openvoxproject/i18n ~i18n-version]

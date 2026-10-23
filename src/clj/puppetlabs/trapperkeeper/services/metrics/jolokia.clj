@@ -1,10 +1,11 @@
 (ns puppetlabs.trapperkeeper.services.metrics.jolokia
   "Clojure helpers for constructing and configuring Jolokia servlets."
-  (:require [clojure.tools.logging :as log]
+  (:require [clojure.string :as str]
+            [clojure.tools.logging :as log]
             [clojure.walk :as walk]
             [ring.util.jakarta.servlet :as ring-servlet]
             [schema.core :as schema])
-  (:import [jakarta.servlet.http HttpServletRequest]
+  (:import [jakarta.servlet.http HttpServletRequest HttpServletRequestWrapper]
            [org.jolokia.core.api LogHandler]
            [org.jolokia.server.core.config ConfigKey]
            [org.jolokia.server.core.http AgentServlet]))
@@ -101,4 +102,15 @@
              {:status 403
               :headers {}
               :body message})
-            (proxy-super service request response)))))))
+            (let [content-type (.getContentType request)
+                  request (if (and content-type
+                                   (= "application/json"
+                                      (-> content-type
+                                          (str/split #";" 2)
+                                          first
+                                          str/trim
+                                          str/lower-case)))
+                            (proxy [HttpServletRequestWrapper] [request]
+                              (getContentType [] "application/json"))
+                            request)]
+              (proxy-super service request response))))))))

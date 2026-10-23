@@ -200,7 +200,16 @@
 
             (let [resp (http-client/post
                         "http://localhost:8180/metrics/v2"
-                        {:body (json/generate-string
+                        {:headers {"Content-Type" "text/plain"}
+                         :body "[]"})
+                  body (slurp (:body resp))]
+              (is (= 400 (:status resp)))
+              (is (re-find #"Unsupported Content-Type" body)))
+
+            (let [resp (http-client/post
+                        "http://localhost:8180/metrics/v2"
+                        {:headers {"Content-Type" "application/json"}
+                         :body (json/generate-string
                                  [{:type "read" :mbean "pl.other.reg:name=puppetlabs.localhost.foo"}
                                   {:type "read" :mbean "pl.other.reg:name=puppetlabs.localhost.bar"}])})
                   body (parse-response resp true)]
