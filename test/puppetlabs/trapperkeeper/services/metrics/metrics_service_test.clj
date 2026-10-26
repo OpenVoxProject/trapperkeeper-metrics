@@ -82,7 +82,6 @@
       :sort-order 500
       :name "metrics"}]}})
 
-
 (deftest test-metrics-service-error
   (testing "Metrics service throws an error if missing server-id"
     (logging/with-test-logging
@@ -164,57 +163,57 @@
                               (metrics/host-metric-name "localhost" "bar")
                               (metrics/gauge 500))
 
-            (let [resp (http-client/post
-                        "http://localhost:8180/metrics/v1/mbeans"
-                        {:body (json/generate-string
-                                ["pl.other.reg:name=puppetlabs.localhost.foo"
-                                 "pl.other.reg:name=puppetlabs.localhost.bar"])})
-                  body (parse-response resp)]
-              (is (= 200 (:status resp)))
-              (is (= [{"Value" 2} {"Value" 500}] body)))
+            (testing "/v1"
+              (let [resp (http-client/post
+                          "http://localhost:8180/metrics/v1/mbeans"
+                          {:body (json/generate-string
+                                  ["pl.other.reg:name=puppetlabs.localhost.foo"
+                                   "pl.other.reg:name=puppetlabs.localhost.bar"])})
+                    body (parse-response resp)]
+                (is (= 200 (:status resp)))
+                (is (= [{"Value" 2} {"Value" 500}] body)))
 
-            (let [resp (http-client/post
-                        "http://localhost:8180/metrics/v1/mbeans"
-                        {:body (json/generate-string
-                                {:foo "pl.other.reg:name=puppetlabs.localhost.foo"
-                                 :bar "pl.other.reg:name=puppetlabs.localhost.bar"})})
-                  body (parse-response resp)]
-              (is (= 200 (:status resp)))
-              (is (= {"foo" {"Value" 2}
-                      "bar" {"Value" 500}} body)))
+              (let [resp (http-client/post
+                          "http://localhost:8180/metrics/v1/mbeans"
+                          {:body (json/generate-string
+                                  {:foo "pl.other.reg:name=puppetlabs.localhost.foo"
+                                   :bar "pl.other.reg:name=puppetlabs.localhost.bar"})})
+                    body (parse-response resp)]
+                (is (= 200 (:status resp)))
+                (is (= {"foo" {"Value" 2}
+                        "bar" {"Value" 500}} body)))
 
-            (let [resp (http-client/post
-                        "http://localhost:8180/metrics/v1/mbeans"
-                        {:body (json/generate-string
-                                "pl.other.reg:name=puppetlabs.localhost.foo")})
-                  body (parse-response resp)]
-              (is (= 200 (:status resp)))
-              (is (= {"Value" 2} body)))
+              (let [resp (http-client/post
+                          "http://localhost:8180/metrics/v1/mbeans"
+                          {:body (json/generate-string
+                                  "pl.other.reg:name=puppetlabs.localhost.foo")})
+                    body (parse-response resp)]
+                (is (= 200 (:status resp)))
+                (is (= {"Value" 2} body)))
 
-            (let [resp (http-client/post
-                        "http://localhost:8180/metrics/v1/mbeans"
-                        {:body "{\"malformed json"})
-                  body (slurp (:body resp))]
-              (is (= 400 (:status resp)))
-              (is (re-find #"Unexpected end-of-input" body)))
+              (let [resp (http-client/post
+                          "http://localhost:8180/metrics/v1/mbeans"
+                          {:body "{\"malformed json"})
+                    body (slurp (:body resp))]
+                (is (= 400 (:status resp)))
+                (is (re-find #"Unexpected end-of-input" body))))
 
-            (let [resp (http-client/post
-                        "http://localhost:8180/metrics/v2"
-                        {:headers {"Content-Type" "text/plain"}
-                         :body "[]"})
-                  body (slurp (:body resp))]
-              (is (= 400 (:status resp)))
-              (is (re-find #"Unsupported Content-Type" body)))
-
-            (let [resp (http-client/post
-                        "http://localhost:8180/metrics/v2"
-                        {:headers {"Content-Type" "application/json"}
-                         :body (json/generate-string
-                                 [{:type "read" :mbean "pl.other.reg:name=puppetlabs.localhost.foo"}
-                                  {:type "read" :mbean "pl.other.reg:name=puppetlabs.localhost.bar"}])})
-                  body (parse-response resp true)]
-              (is (= [200 200] (map :status body)))
-              (is (= [{:Value 2} {:Value 500}] (map :value body))))))
+            (testing "/v2"
+              (let [request-body (json/generate-string
+                                  [{:type "read" :mbean "pl.other.reg:name=puppetlabs.localhost.foo"}
+                                   {:type "read" :mbean "pl.other.reg:name=puppetlabs.localhost.bar"}])
+                    assert-response (fn [content-type]
+                                      (let [resp (http-client/post
+                                                  "http://localhost:8180/metrics/v2"
+                                                  {:headers {"Content-Type" content-type}
+                                                   :body request-body})
+                                            body (parse-response resp true)]
+                                        (is (= [200 200] (map :status body)))
+                                        (is (= [{:Value 2} {:Value 500}] (map :value body)))))]
+                (testing "without a charset"
+                  (assert-response "application/json"))
+                (testing "with a UTF-8 charset"
+                  (assert-response "application/json; charset=UTF-8"))))))
 
         (testing "metrics/v2 should deny write requests"
           (let [resp (http-client/get
@@ -230,7 +229,16 @@
                             (jolokia-encode "java.util.logging:type=Logging")
                             "/getLoggerLevel/root"))
                 body (parse-response resp)]
-            (is (= 403 (get body "status")))))))))
+            (is (= 403 (get body "status")))))
+
+       (testing "metrics/v2 rejects unsupported content types"
+         (let [resp (http-client/post
+                      "http://localhost:8180/metrics/v2"
+                      {:headers {"Content-Type" "text/plain"}
+                       :body "[]"})
+               body (slurp (:body resp))]
+           (is (= 400 (:status resp)))
+           (is (re-find #"Unsupported Content-Type" body))))))))
 
 (deftest metrics-service-with-tk-auth
   (testing "tk-auth works when included in bootstrap"
