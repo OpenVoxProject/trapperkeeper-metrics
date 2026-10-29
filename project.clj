@@ -41,7 +41,7 @@
                          [org.openvoxproject/trapperkeeper "5.0.6"]
                          [org.openvoxproject/trapperkeeper "5.0.6" :classifier "test"]
                          [org.openvoxproject/trapperkeeper-authorization "2.4.1"]
-                         [org.openvoxproject/trapperkeeper-webserver "12.1.1"]
+                         [org.openvoxproject/trapperkeeper-webserver "12.1.2"]
                          [org.ring-clojure/ring-jakarta-servlet "1.15.6"]
                          [org.slf4j/slf4j-api "2.0.20"]
                          [prismatic/schema "1.4.2"]
