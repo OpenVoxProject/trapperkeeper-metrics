@@ -19,7 +19,7 @@
   :managed-dependencies [[org.clojure/clojure "1.12.6"]
                          [org.clojure/java.jmx "1.1.1"]
                          [org.clojure/tools.logging "1.3.1"]
-                         [cheshire "6.2.0"]
+                         [cheshire "6.2.1"]
                          [commons-codec "1.23.0"]
                          [commons-io "2.22.0"]
                          [io.dropwizard.metrics/metrics-core ~dropwizard-metrics-version]
