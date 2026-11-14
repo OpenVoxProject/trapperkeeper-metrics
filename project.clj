@@ -24,7 +24,7 @@
                          [commons-io "2.22.0"]
                          [io.dropwizard.metrics/metrics-core ~dropwizard-metrics-version]
                          [io.dropwizard.metrics/metrics-graphite ~dropwizard-metrics-version]
-                         [org.bouncycastle/bcpkix-jdk18on "1.86"]
+                         [org.bouncycastle/bcpkix-jdk18on "1.87"]
                          [org.bouncycastle/bcpkix-fips "2.1.13"]
                          [org.bouncycastle/bc-fips "2.1.3"]
                          [org.bouncycastle/bctls-fips "2.1.25"]
